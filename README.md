@@ -69,7 +69,7 @@ const ContainerComponent = connect(mapModelToProps)(Presenter);
 const model = new Model({counter: 1});
 
 const ParentComponent = () => (
-    <Provider>
+    <Provider model={model}>
         <ContainerComponent />
     </Provider>
 );
