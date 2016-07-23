@@ -3,8 +3,8 @@ import assert from 'assert';
 import {mount} from 'enzyme';
 import {Model} from 'backbone';
 
-import Provider from './../src/provider.jsx';
-import connect from './../src/connect.jsx';
+import Provider from './../src/provider';
+import connect from './../src/connect';
 
 const DumbComponent = ({
 	count

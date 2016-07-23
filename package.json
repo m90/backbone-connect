@@ -1,6 +1,6 @@
 {
   "name": "backbone-connect",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "react-redux inspired Backbone.js/React bindings",
   "main": "./lib/index.js",
   "scripts": {

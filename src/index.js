@@ -1,3 +1,3 @@
-import Provider from './provider.jsx';
-import connect from './connect.jsx';
+import Provider from './provider';
+import connect from './connect';
 export {Provider, connect};

@@ -6,11 +6,12 @@ const connect = (mapModelToProps, ...renderEvents) => {
 		? renderEvents.join(' ')
 		: 'change';
 	return (ComposedComponent) => {
+		const displayName = ComposedComponent.displayName || 'Component';
 		class ContainerComponent extends Component{
 			constructor(props, context, ...rest){
 				if (!context.model && !props.model){
 					throw new Error(
-						`Could not find "model" in either the context or props of "${ComposedComponent.displayName}".`
+						`Could not find "model" in either the context or props of "${displayName}".`
 					);
 				}
 				super(props, context, ...rest);
@@ -39,7 +40,7 @@ const connect = (mapModelToProps, ...renderEvents) => {
 				, PropTypes.instanceOf(Collection)
 			])
 		};
-		ContainerComponent.displayName = `backboneConnect(${eventString})(${ComposedComponent.displayName})`;
+		ContainerComponent.displayName = `backboneConnect(${eventString})(${displayName})`;
 		return ContainerComponent;
 	};
 };

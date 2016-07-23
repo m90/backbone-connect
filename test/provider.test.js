@@ -3,7 +3,7 @@ import assert from 'assert';
 import {mount} from 'enzyme';
 import {Model, Collection} from 'backbone';
 
-import Provider from './../src/provider.jsx';
+import Provider from './../src/provider';
 
 const TestComponent = (props, {model}) => (
 	<div id='data'>{model.get('data')}</div>
