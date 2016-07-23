@@ -74,6 +74,17 @@ const ParentComponent = () => (
 ReactDOM.render(<ParentComponent />, document.querySelector('#host'));
 ```
 
+`mapModelToProps` receives the container component's own props as a second argument:
+
+```jsx
+const mapModelToProps = (model, ownProps) => {
+    return {
+        headline: ownProps.headline
+        , counter: model.get('counter')
+    };
+}
+```
+
 By default `connect` listens to `change` events on the Model/Collection. In case you need different behavior you can pass an arbitrary list of event names when calling the function. Each of these events will then trigger a re-evaluation:
 
 ```jsx
