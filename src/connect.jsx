@@ -21,9 +21,7 @@ const connect = (mapModelToProps, ...renderEvents) => {
 				this.model.off(eventString);
 			}
 			render(){
-				const mappedProps = mapModelToProps(
-					this.context.model
-				);
+				const mappedProps = mapModelToProps(this.model, this.props);
 				return (
 					<ComposedComponent {...mappedProps} />
 				);
