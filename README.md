@@ -1,2 +1,2 @@
 # backbone-connect
-redux inspired backbone-react bindings
+> react-redux inspired Backbone.js/React bindings
