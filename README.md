@@ -9,7 +9,7 @@ $ npm install backbone-connect
 
 ### Usage
 
-This module tries to mimic the behavior of `react-redux` (minus the redux store) so it might be a good idea to start with reading [its documentation](html) to gain understanding of how separating presentational and container components works.
+This module tries to mimic the behavior of `react-redux` (minus the redux store) so it might be a good idea to start with reading [its documentation](http://redux.js.org/docs/basics/UsageWithReact.html) to gain understanding of how separating presentational and container components works.
 
 ### API
 
