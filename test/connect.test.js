@@ -122,5 +122,15 @@ describe('connect.jsx', () => {
 				);
 			});
 		});
+		it('uses the model passed in the props when it is passed one both in context and in props', () => {
+			const model = new Model({count: 0});
+			const innerModel = new Model({count: 47});
+			const mountedComponent = mount(
+				<Provider model={model}>
+					<ContainerComponent model={innerModel} />
+				</Provider>
+			);
+			assert(mountedComponent.text().indexOf('47') > -1);
+		});
 	});
 });
