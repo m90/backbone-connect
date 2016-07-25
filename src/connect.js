@@ -22,7 +22,11 @@ const connect = (mapModelToProps, ...renderEvents) => {
 				this.model.off(eventString);
 			}
 			render(){
-				const mappedProps = mapModelToProps(this.model, this.props);
+				const mappedProps = mapModelToProps(
+					this.model.toJSON()
+					, this.model
+					, this.props
+				);
 				return (
 					<ComposedComponent {...mappedProps} />
 				);
@@ -40,7 +44,7 @@ const connect = (mapModelToProps, ...renderEvents) => {
 				, PropTypes.instanceOf(Collection)
 			])
 		};
-		ContainerComponent.displayName = `backboneConnect(${eventString})(${displayName})`;
+		ContainerComponent.displayName = `BackboneConnect(${eventString})(${displayName})`;
 		return ContainerComponent;
 	};
 };

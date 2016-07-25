@@ -22,11 +22,11 @@ DumbComponent.propTypes = {
 	, handleClick: PropTypes.func
 };
 
-const mapModelToProps = (model) => {
+const mapModelToProps = (json, model) => {
 	return {
-		count: model.get('count')
+		count: json.count
 		, handleClick: () => {
-			model.set('count', model.get('count') + 1);
+			model.set('count', json.count + 1);
 		}
 	};
 };
@@ -61,12 +61,12 @@ describe('connect.jsx', () => {
 		});
 		it('gives access to the container component\'s own props', () => {
 			const model = new Model({count: 0});
-			const mapModelAndSelfToProps = (model, ownProps) => {
+			const mapModelAndSelfToProps = (json, model, ownProps) => {
 				return {
-					count: model.get('count')
+					count: json.count
 					, handleClick: () => {
 						model.set(
-							'count', model.get('count') + ownProps.increment
+							'count', json.count + ownProps.increment
 						);
 					}
 				};

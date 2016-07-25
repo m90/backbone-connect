@@ -56,14 +56,12 @@ const Presenter = ({
     </div>
 );
 
-const mapModelToProps = (model) => {
-    return {
-        counter: model.get('counter')
-        , handleClick: () => {
-            model.set('counter', model.get('counter') + 1);
-        }
+const mapModelToProps = (json, model) => ({
+    counter: json.counter
+    , handleClick(){
+        model.set('counter', json.counter);
     }
-};
+});
 
 const ContainerComponent = connect(mapModelToProps)(Presenter);
 const model = new Model({counter: 1});
@@ -77,15 +75,20 @@ const ParentComponent = () => (
 ReactDOM.render(<ParentComponent />, document.querySelector('#host'));
 ```
 
-`mapModelToProps` receives the container component's own props as a second argument:
+`mapModelToProps` receives following arguments:
+
+1. `toJSON()` version of the Model
+2. the Model/Collection itself
+3. the container component's own props
 
 ```jsx
-const mapModelToProps = (model, ownProps) => {
-    return {
-        headline: ownProps.headline
-        , counter: model.get('counter')
-    };
-}
+const mapModelToProps = (json, model, ownProps) => ({
+    headline: ownProps.headline
+    , counter: json.counter
+    , increaseCounter(){
+        model.set('counter', json.counter + 1);
+    }
+});
 ```
 
 By default `connect` listens to `change` events on the Model/Collection. In case you need different behavior you can pass an arbitrary list of event names when calling the function. Each of these events will then trigger a re-evaluation:

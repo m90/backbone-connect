@@ -2,9 +2,9 @@ import {Component, PropTypes, Children} from 'react';
 import {Model, Collection} from 'backbone';
 
 class Provider extends Component{
-	constructor(...args){
-		super(...args);
-		this.model = this.props.model;
+	constructor(props, context){
+		super(props, context);
+		this.model = props.model;
 	}
 	getChildContext(){
 		return {
