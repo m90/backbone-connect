@@ -71,15 +71,19 @@ describe('connect.jsx', () => {
 				counters: json
 				, handleClick: Function.prototype
 			});
-			const ContainerComponent = connect(mapModelToProps, 'add')(CounterList);
+			const ContainerComponent = connect(mapModelToProps)(CounterList);
 			const mountedComponent = mount(
 				<Provider model={collection}>
 					<ContainerComponent />
 				</Provider>
 			);
 			assert.strictEqual(mountedComponent.find('.counter').length, 1);
-			collection.add({counter: 1});
+			collection.add({count: 1});
 			assert.strictEqual(mountedComponent.find('.counter').length, 2);
+			collection.set([]);
+			assert.strictEqual(mountedComponent.find('.counter').length, 0);
+			collection.add({count: 99});
+			assert.strictEqual(mountedComponent.find('.counter').text(), '99');
 		});
 		it('connects the passed component with a model on the component\'s props', () => {
 			const model = new Model({count: 0});

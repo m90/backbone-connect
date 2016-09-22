@@ -2,9 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {Model, Collection} from 'backbone';
 
 const connect = (mapModelToProps, ...renderEvents) => {
-	const eventString = renderEvents.length
-		? renderEvents.join(' ')
-		: 'change';
 	return (ComposedComponent) => {
 		const displayName = ComposedComponent.displayName || 'Component';
 		class ContainerComponent extends Component{
@@ -16,10 +13,15 @@ const connect = (mapModelToProps, ...renderEvents) => {
 				}
 				super(props, context, ...rest);
 				this.model = this.props.model || this.context.model;
-				this.model.on(eventString, () => this.forceUpdate());
+				this.eventString = renderEvents.length
+					? renderEvents.join(' ')
+					: this.model instanceof Collection
+						? 'change update'
+						: 'change';
+				this.model.on(this.eventString, () => this.forceUpdate());
 			}
 			componentWillUnmount(){
-				this.model.off(eventString);
+				this.model.off(this.eventString);
 			}
 			render(){
 				const mappedProps = mapModelToProps(
@@ -44,7 +46,7 @@ const connect = (mapModelToProps, ...renderEvents) => {
 				, PropTypes.instanceOf(Collection)
 			])
 		};
-		ContainerComponent.displayName = `BackboneConnect(${eventString})(${displayName})`;
+		ContainerComponent.displayName = `BackboneConnect(${displayName})`;
 		return ContainerComponent;
 	};
 };
