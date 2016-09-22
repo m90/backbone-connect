@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import assert from 'assert';
 import {mount} from 'enzyme';
-import {Model} from 'backbone';
+import {Model, Collection} from 'backbone';
 
 import Provider from './../src/provider';
 import connect from './../src/connect';
@@ -11,7 +11,7 @@ const DumbComponent = ({
 	, handleClick
 }) => (
 	<button
-		id='counter'
+		className='counter'
 		onClick={handleClick}
 	>
 		{count}
@@ -19,6 +19,23 @@ const DumbComponent = ({
 );
 DumbComponent.propTypes = {
 	count: PropTypes.number
+	, handleClick: PropTypes.func
+};
+
+const CounterList = (props) => (
+	<div>
+		{props.counters.map((counter, i) => (
+			<DumbComponent
+				key={i}
+				count={counter.count}
+				handleClick={props.handleClick}
+			/>
+		))}
+	</div>
+);
+CounterList.displayName = 'CounterList';
+CounterList.propTypes = {
+	counters: PropTypes.array
 	, handleClick: PropTypes.func
 };
 
@@ -42,22 +59,38 @@ describe('connect.jsx', () => {
 					<ContainerComponent />
 				</Provider>
 			);
-			assert.strictEqual(mountedComponent.find('#counter').text(), '0');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '1');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '2');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '0');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '1');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '2');
+		});
+		it('connects the passed component with a Backbone Collection', () => {
+			const collection = new Collection([{count: 0}]);
+			const mapModelToProps = (json) => ({
+				counters: json
+				, handleClick: Function.prototype
+			});
+			const ContainerComponent = connect(mapModelToProps, 'add')(CounterList);
+			const mountedComponent = mount(
+				<Provider model={collection}>
+					<ContainerComponent />
+				</Provider>
+			);
+			assert.strictEqual(mountedComponent.find('.counter').length, 1);
+			collection.add({counter: 1});
+			assert.strictEqual(mountedComponent.find('.counter').length, 2);
 		});
 		it('connects the passed component with a model on the component\'s props', () => {
 			const model = new Model({count: 0});
 			const mountedComponent = mount(
 				<ContainerComponent model={model} />
 			);
-			assert.strictEqual(mountedComponent.find('#counter').text(), '0');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '1');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '2');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '0');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '1');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '2');
 		});
 		it('gives access to the container component\'s own props', () => {
 			const model = new Model({count: 0});
@@ -77,11 +110,11 @@ describe('connect.jsx', () => {
 					<DoubleComponent increment={2} />
 				</Provider>
 			);
-			assert.strictEqual(mountedComponent.find('#counter').text(), '0');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '2');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '4');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '0');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '2');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '4');
 		});
 		it('can override the model events that trigger a rerendering', () => {
 			const model = new Model({count: 0});
@@ -91,15 +124,15 @@ describe('connect.jsx', () => {
 					<CustomComponent />
 				</Provider>
 			);
-			assert.strictEqual(mountedComponent.find('#counter').text(), '0');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '0');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '0');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '0');
 			model.trigger('sync');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '1');
-			mountedComponent.find('#counter').simulate('click');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '1');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '1');
+			mountedComponent.find('.counter').simulate('click');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '1');
 			model.trigger('custom');
-			assert.strictEqual(mountedComponent.find('#counter').text(), '2');
+			assert.strictEqual(mountedComponent.find('.counter').text(), '2');
 		});
 		it('throws when trying to connect a component where no model is available', () => {
 			const model = new Model();
