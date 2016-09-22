@@ -91,7 +91,7 @@ const mapModelToProps = (json, model, ownProps) => ({
 });
 ```
 
-By default `connect` listens to `change` events on the Model/Collection. In case you need different behavior you can pass an arbitrary list of event names when calling the function. Each of these events will then trigger a re-evaluation:
+By default `connect` listens to `change` events for a Model or `change update` for a Collection. In case you need different behavior you can pass an arbitrary list of event names when calling the function. Each of these events will then trigger a re-evaluation:
 
 ```jsx
 const ContainerComponent = connect(mapModelToProps, 'sync', 'remove', 'customevent')(Presenter);
